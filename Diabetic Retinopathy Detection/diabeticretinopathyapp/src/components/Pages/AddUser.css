@@ -1,0 +1,45 @@
+.adduser_page {
+	position: absolute;
+	top: 65%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 650px;
+	height: 420px;
+	background: white;
+	border-radius: 10px;
+	border-style: outset;
+	box-shadow: 4px 7px;
+	opacity: 0.6;
+}
+
+.text_box {
+	display: inline-block;
+	margin: 8px;
+	padding-right: 40px;
+}
+
+
+.select_option {
+	margin-left: 19px;
+	line-height: 4em;
+}
+
+.select_option select {
+	box-sizing: border-box;
+	cursor: pointer;
+	padding-right: 35px;
+	border-radius: 7px;
+	height: 1.7em;
+}
+
+.radio_box {
+	display: inline-block;
+	margin: 8px;
+}
+
+.save_button input {
+	margin-left: 70%;
+	cursor: pointer;
+}
+
+

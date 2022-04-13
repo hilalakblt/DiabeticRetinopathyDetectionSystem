@@ -1,0 +1,13 @@
+.patients_page {
+	position: absolute;
+	top: 65%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 650px;
+	height: 350px;
+	background: white;
+	border-radius: 10px;
+	border-style: outset;
+	box-shadow: 4px 7px;
+	opacity: 0.6;
+}

@@ -1,0 +1,39 @@
+nav {
+	text-align: center;
+	margin: 50px;
+}
+
+.nav_bar {
+	display: flex;
+	width: 60%;
+	margin: auto;
+	justify-content: space-around;
+	align-items: center;
+	min-height: 10vh;
+	background: white;
+	color: white;
+	opacity: 0.6;
+	border-radius: 25px;
+	border-style: outset;
+	box-shadow: 2px 4px;
+}
+
+.nav_links {
+	display: flex;
+	margin: auto;
+	background-color: white;
+	opacity: 0.6;
+	width: 60%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	list-style: none;
+	font-weight: bold;
+	border: 5px solid;
+	padding: 18px;
+}
+
+.nav_text {
+	display: flex;
+	color: #000000;
+}

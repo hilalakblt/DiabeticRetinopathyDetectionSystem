@@ -1,0 +1,38 @@
+.detection_page {
+	position: absolute;
+	top: 65%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 650px;
+	height: 460px;
+	background: white;
+	border-radius: 10px;
+	border-style: outset;
+	box-shadow: 4px 7px;
+	opacity: 0.6;
+}
+ 
+.text_box input {
+	border-radius: 5px;
+	display: inline-block;
+	border-bottom: 2px solid #adadad;
+	margin: 10px 10px;
+	font-size: 17px;
+}
+
+.radio_box input {
+	cursor: pointer;
+	margin: 10px 10px;
+	font-size: 17px;
+}
+
+.image_box img {
+	width: 120px;
+	height: 120px;
+	margin: 15px 20px;
+}
+
+.file_upload input {
+	cursor: pointer;
+	margin: 10px 20px;
+}
