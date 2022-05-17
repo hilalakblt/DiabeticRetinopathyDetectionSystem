@@ -40,7 +40,7 @@ const Login = (props) => {
 
 	return (
 		<div className="login_form">
-			<h1>Login</h1>
+			<h1>DRDS</h1>
 			<form>
 				<div className="login_text">
 					<label>TC Number:</label>

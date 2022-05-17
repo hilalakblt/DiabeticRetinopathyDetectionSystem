@@ -12,10 +12,8 @@ nav {
 	min-height: 10vh;
 	background: white;
 	color: white;
-	opacity: 0.6;
+	opacity: 0.8;
 	border-radius: 25px;
-	border-style: outset;
-	box-shadow: 2px 4px;
 }
 
 .nav_links {

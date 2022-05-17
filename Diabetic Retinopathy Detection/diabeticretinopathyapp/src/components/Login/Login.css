@@ -7,8 +7,6 @@
 	width: 400px;
 	background: white;
 	border-radius: 10px;
-	border-style: outset;
-	box-shadow: 4px 7px;
 	opacity: 0.6;
 }
 
@@ -62,9 +60,11 @@ input[type='submit'] {
 	border-radius: 25px;
 	cursor: pointer;
 	outline: none;
+	background-color: #8BC8B2;
 }
 
 input[type='submit']:hover {
 	border-color: #19593F;
+
 	transition: .5s;
 }

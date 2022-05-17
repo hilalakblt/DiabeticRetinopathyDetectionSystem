@@ -9,23 +9,41 @@ from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, uns
 from datetime import datetime, timedelta, timezone
 import datetime
 import jwt
+from keras.models import load_model
+import json
+import cv2
 
-#resources={'/*':{'origins': 'http://localhost:3000'}}
+
 
 app = Flask(__name__) 
-CORS(app, support_credentials=True)
-
+cors = CORS(app, support_credentials=True, resources={'/*':{'origins': 'http://localhost:3000'}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@localhost/diabeticRetinopathy'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+
+#app.config['JWT_TOKEN_LOCATION'] = ['headers', 'query_string']
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
 
 bcrypt = Bcrypt(app)
 ma = Marshmallow(app)
+
+
+def imgPreprocessing(imagePath):
+    image = cv2.imread(imagePath)
+    image = cv2.resize(image,(250, 250))
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    image = cv2.equalizeHist(image)
+    image = cv2.medianBlur(image, 3)
+    image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+    image = image.reshape(1, 250, 250, 3)
+    return image
+
 
 @app.after_request
 def after_request(response):
@@ -44,11 +62,13 @@ class Patients(db.Model):
 	doctorName = db.Column(db.String(25))
 	doctorSurname = db.Column(db.String(30))
 
-	def __init__(self, patientsTcNumber, nameSurname, age, gender):
+	def __init__(self, patientsTcNumber, nameSurname, age, gender, doctorName, doctorSurname):
 		self.patientsTcNumber = patientsTcNumber
 		self.nameSurname = nameSurname
 		self.age = age
 		self.gender = gender
+		self.doctorName = doctorName
+		self.doctorSurname = doctorSurname
 
 class Diseases(db.Model):
 	__tablename__ = 'Diseases'
@@ -110,6 +130,8 @@ disease_schema = DiseasesSchema()
 diseases_schema = DiseasesSchema(many=True)
 
 
+
+
 @app.route("/@currentUser")
 def get_current_user():
 	userId = session.get("userId")
@@ -150,8 +172,8 @@ def login_user():
 def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        now = datetime.datetime.now(timezone.utc)
+        target_timestamp = datetime.datetime.timestamp(now + timedelta(minutes=30))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
             data = response.get_json()
@@ -172,17 +194,37 @@ def logout_user():
 def get_patients():
 	all_patients = Patients.query.all()
 	results = patients_schema.dump(all_patients)
+
 	return jsonify(results)
 
 @app.route('/detection', methods = ['POST'])
-def add_patients():
+def prediction_disease():
+	model = load_model('efficientModel.h5')
+	
+	imageFile = request.files['file']
+	imagePath = "./FundusImages/" + imageFile.filename
+	imageFile.save(imagePath)
+	image = imgPreprocessing(imagePath)
+
+	pred = model.predict(image)
+	result =str(pred[0][0])
+	return result
+	
+	#return imagePath
+
+@app.route('/savepatient', methods = ['POST'])
+def save_patient():
 	jsondata = request.get_json(force=True)
 	patientsTcNumber = jsondata['patientsTcNumber']
 	nameSurname = jsondata['nameSurname']
 	age = jsondata['age']
 	gender = jsondata['gender']
 	diseaseLevel = jsondata['diseaseLevel']
-	imagePath = jsondata['imagePath']
+
+	#Getting current user
+	user = Doctors.query.filter_by(doctor_tcNumber=get_jwt_identity()).first()
+	doctorName = user.name
+	doctorSurname = user.surname
 
 	patient = Patients(patientsTcNumber = patientsTcNumber, nameSurname = nameSurname, age = age, gender = gender)
 	disease = Diseases(diseaseLevel = diseaseLevel, imagePath = imagePath, patient_tcNumber = patientsTcNumber)
@@ -196,6 +238,7 @@ def add_patients():
 	return jsonify(dump_data)
 
 @app.route('/adduser', methods = ['POST'])
+@jwt_required()
 def add_users():
 	jsondata = request.get_json(force=True)
 	name = jsondata['name']
@@ -206,10 +249,15 @@ def add_users():
 	email = jsondata['email']
 	passwd = jsondata['passwd']
 	disposition = jsondata['disposition']
+
+	current_user = DoctorType.query.filter_by(tcNumber=get_jwt_identity()).first()
+	doctorDisposition = current_user.disposition
 	#Check the user exists
 	user_exists = Doctors.query.filter_by(doctor_tcNumber=doctor_tcNumber).first() is not None
 	if user_exists:
 		return jsonify({"error": "User already exists"}), 409
+	elif(doctorDisposition != "Head of Department"):
+		return jsonify({"error": "You don't have permission!"}), 409
 	#Hash the password
 	hashed_passwd = bcrypt.generate_password_hash(passwd)
 
@@ -223,6 +271,18 @@ def add_users():
 	return jsonify({
 		"userId": doctor_user.userId
 	})
+@app.route('/delete/<patientsId>', methods = ['DELETE'])
+@cross_origin(supports_credentials=True, headers=['Content- Type','Authorization'])
+def patient_delete(patientsId):
+	patient = Patients.query.get(patientsId)
+	tcNm = patient.patientsTcNumber
+	disease = Diseases.query.filter_by(patient_tcNumber = tcNm).first()
+	db.session.delete(disease)
+	db.session.delete(patient)
+	db.session.commit()
+
+	dump_data = patient_schema.dump(patient)
+	return jsonify(dump_data)
 
 
 if __name__ == "__main__":

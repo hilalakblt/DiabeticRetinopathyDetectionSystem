@@ -1,13 +1,30 @@
 .patients_page {
 	position: absolute;
-	top: 65%;
+	top: 35%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	bottom: 30px;
+	transform: translate(-50%);
 	width: 650px;
-	height: 350px;
+	height: 850px;
 	background: white;
 	border-radius: 10px;
-	border-style: outset;
-	box-shadow: 4px 7px;
-	opacity: 0.6;
+	opacity: 0.8;
+}
+
+.patient_info h2{
+	margin-left: 30px;
+	margin-top: 50px;
+}
+
+.patient_info p{
+	margin-left: 30px;
+	width: 600px;
+}
+
+.delete_button input{
+	margin-left: 80%;
+	cursor: pointer;
+	width: 90px;
+	border-radius: 3px;
+	background-color: #8BC8B2;
 }

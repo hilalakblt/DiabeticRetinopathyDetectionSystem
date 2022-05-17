@@ -4,7 +4,7 @@ import './AddUser.css';
 import APIService from './APIService';
 
 
-const AddUser = () => {
+const AddUser = (props) => {
 
 	const [name, setUserName] = useState('');
 	const [surname, setUserSurname] = useState('');
@@ -14,6 +14,7 @@ const AddUser = () => {
 	const [passwd, setPassword] = useState('');
 	const [disposition, setDisposition] = useState(''); //Database icin {selected} kullan
 	const [gender, setGender] = useState('');
+
 
 
 	const insertDoctor = () => {

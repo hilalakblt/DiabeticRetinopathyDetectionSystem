@@ -7,20 +7,20 @@
 	height: 420px;
 	background: white;
 	border-radius: 10px;
-	border-style: outset;
-	box-shadow: 4px 7px;
-	opacity: 0.6;
+	opacity: 0.8;
 }
 
 .text_box {
 	display: inline-block;
-	margin: 8px;
-	padding-right: 40px;
+	margin-top: 20px;
+	margin-left: 57px;
+	padding-right: 20px;
 }
 
 
 .select_option {
-	margin-left: 19px;
+	margin-top: 25px;
+	margin-left: 67px;
 	line-height: 4em;
 }
 
@@ -34,12 +34,15 @@
 
 .radio_box {
 	display: inline-block;
-	margin: 8px;
+	margin-top: 10px;
+	margin-left: 53px;
 }
 
 .save_button input {
-	margin-left: 70%;
+	margin-left: 72%;
 	cursor: pointer;
+	width: 80px;
+	background-color: #8BC8B2;
 }
 
 
