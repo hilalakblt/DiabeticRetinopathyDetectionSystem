@@ -58,7 +58,7 @@ function App() {
                   <NavBar token={removeToken} />
                   <Routes token={token} setToken={setToken}>
                     <Route index element={<Detection />} />
-                    <Route path="/detection" element={<Detection />} />
+                    <Route path="/detection" element={<Detection token={token} />} />
                     <Route path="/patients" element={<Patients />}/>
                     <Route path="/statistics" element={<Statistics />}/>
                     <Route path="/addUser" element={<AddUser />}/>

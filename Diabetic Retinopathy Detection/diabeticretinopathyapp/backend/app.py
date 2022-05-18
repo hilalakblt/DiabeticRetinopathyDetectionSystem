@@ -213,6 +213,7 @@ def prediction_disease():
 	#return imagePath
 
 @app.route('/savepatient', methods = ['POST'])
+@jwt_required()
 def save_patient():
 	jsondata = request.get_json(force=True)
 	patientsTcNumber = jsondata['patientsTcNumber']
@@ -226,11 +227,11 @@ def save_patient():
 	doctorName = user.name
 	doctorSurname = user.surname
 
-	patient = Patients(patientsTcNumber = patientsTcNumber, nameSurname = nameSurname, age = age, gender = gender)
-	disease = Diseases(diseaseLevel = diseaseLevel, imagePath = imagePath, patient_tcNumber = patientsTcNumber)
+	patient = Patients(patientsTcNumber = patientsTcNumber, nameSurname = nameSurname, age = age, gender = gender, doctorName=doctorName, doctorSurname=doctorSurname)
+	#disease = Diseases(diseaseLevel = diseaseLevel, imagePath=imagePath, patient_tcNumber = patientsTcNumber)
 
 	db.session.add(patient)
-	db.session.add(disease)
+	#db.session.add(disease)
 	db.session.commit()
 
 	dump_data = patient_schema.dump(patient)

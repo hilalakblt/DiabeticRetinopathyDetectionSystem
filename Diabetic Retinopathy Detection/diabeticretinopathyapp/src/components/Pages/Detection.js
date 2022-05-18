@@ -1,22 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
 import './Detection.css'
-import axios from 'axios';
 
 const Detection = (props) => {
 
-	const [patientsTCNumber, setPatientsTCNumber] = useState('');
+	const [patientsTcNumber, setPatientsTCNumber] = useState('');
 	const [nameSurname, setNameSurname] = useState('');
 	const [age, setAge] = useState('');
 	const [gender, setGender] = useState('');
 	const [file, setFile] = useState(null);
 	const [imgData, setImgData] = useState('');
-	const [prediction, setPrediction] = useState(null);
+	const [diseaseLevel, setDiseaseLevel] = useState(null);
 
-	var showdate = new Date();
+	/*var showdate = new Date();
 	var displayDate = showdate.getDate()
 			  + '/' + showdate.getMonth() 
-			  + '/' + showdate.getFullYear(); // Database icin {displayDate} kullan
+			  + '/' + showdate.getFullYear(); // Database icin {displayDate} kullan*/
 
 	
 
@@ -29,9 +28,9 @@ const Detection = (props) => {
 		});
 		if (result.status === 200){
 			const text = await result.text();
-			setPrediction(text);
+			setDiseaseLevel(text);
 		}else {
-			setPrediction("Error from API");
+			setDiseaseLevel("Error from API");
 		}
 	} 
 		
@@ -47,18 +46,27 @@ const Detection = (props) => {
 	    }
 	};
 
-	/*const insertPatient = () => {
-		APIService.InsertDoctor({ patientsTCNumber, nameSurname, age, gender, prediction})
-		.then(resp => console.log(resp))
-		.catch(error => console.log(error))
-		//After adding doctor clear the inputs
+	const insertPatient = () => {
+		const requestOption = {
+			method: 'POST',
+			headers: { 
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + props.token
+			},
+			body: JSON.stringify({patientsTcNumber:patientsTcNumber, nameSurname:nameSurname, age:age, gender:gender, diseaseLevel:diseaseLevel})
+		};
+		fetch('http://127.0.0.1:5000/savepatient', requestOption)
+			.then(response => response.json())
+
 		setPatientsTCNumber("");
 		setNameSurname("");
 		setAge("");
 		setGender("");
-		setPrediction(null);
+		setDiseaseLevel(null);
 		setFile(null)
-	}*/
+		setImgData('')
+			
+	}	
 
 	return (
 		<div className='detection_page'>
@@ -68,7 +76,7 @@ const Detection = (props) => {
 					<input 
 						type="text" 
 						placeholder="TC Number"
-						value={patientsTCNumber} //Database icin burdaki deger
+						value={patientsTcNumber}
 						onChange={(e) => setPatientsTCNumber(e.target.value)}
 					/>
 				</div>
@@ -77,7 +85,7 @@ const Detection = (props) => {
 					<input 
 						type="text" 
 						placeholder="Name and Surname"
-						value={nameSurname} //Database icin burdaki deger
+						value={nameSurname}
 						onChange={(e) => setNameSurname(e.target.value)}
 					/>
 				</div>
@@ -96,7 +104,7 @@ const Detection = (props) => {
 						type="radio" 
 						value="Female"
 						name="gender"
-						checked={gender === "Female"} //Database icin {gender} kullan, date icin {displayDate} kullan
+						checked={gender === "Female"}
 						onChange={(e) => setGender(e.target.value)}
 					/>Female
 					<input 
@@ -115,9 +123,9 @@ const Detection = (props) => {
 				</div>
 				<div className='detection_button'>
 					<input type='button' value='Detect' onClick={onSubmit} />
-					<input type='button' value='Save' />
+					<input type='button' value='Save' onClick={insertPatient} />
 				</div>
-					{prediction}	
+					{diseaseLevel}	
 			</form>
 			
 		</div>

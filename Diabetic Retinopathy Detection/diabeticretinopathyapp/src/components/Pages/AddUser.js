@@ -12,7 +12,7 @@ const AddUser = (props) => {
 	const [email, setEmail] = useState('');
 	const [doctor_tcNumber, setTCNumber] = useState('');
 	const [passwd, setPassword] = useState('');
-	const [disposition, setDisposition] = useState(''); //Database icin {selected} kullan
+	const [disposition, setDisposition] = useState('');
 	const [gender, setGender] = useState('');
 
 
