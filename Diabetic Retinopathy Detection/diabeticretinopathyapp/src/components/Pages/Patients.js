@@ -1,9 +1,8 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import './Patients.css';
-import APIService from './APIService';
 
-const Patients = () => {
+const Patients = (props) => {
 
 	const [patients, setPatients] = useState([])
 
@@ -11,8 +10,7 @@ const Patients = () => {
 		fetch('http://127.0.0.1:5000/patients', {
 			'method': 'GET',
 			headers: {
-				'Content-Type': 'applications/json',
-				'Authorization': `Token ${localStorage.getItem('token')}`,
+				'Content-Type': 'applications/json'
 			}
 		})
 		.then(resp => resp.json())
@@ -30,9 +28,33 @@ const Patients = () => {
 		setPatients(new_patient)
 	}
 
-	const deletePatient = (patient) => {
+	/*const deletePatient = (patient) => {
 		APIService.DeletePatient(patient.patientsId)
 		.then(() => deletedPatient(patient))
+	}*/
+
+	async function deletePatient(patient){
+		const patientsId = patient.patientsId
+		const reqOptions = {
+			method: 'DELETE',
+			mode: 'cors',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
+      			'Access-Control-Allow-Headers': 'Content-Type',
+      			'Access-Control-Allow-Origin': 'http://localhost:3000',
+      			'Access-Control-Allow-Methods': 'DELETE',
+      			'Authorization': 'Bearer ' + props.token
+			}
+		};
+		let result = await fetch(`http://127.0.0.1:5000/delete/${patientsId}`, reqOptions);
+		if(result.status === 200){
+			deletedPatient(patient)
+			alert("Successfully deleted!")
+		}else{
+			alert("No permission!")
+		}
 	}
 
 	return (

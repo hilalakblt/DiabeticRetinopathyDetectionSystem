@@ -273,12 +273,20 @@ def add_users():
 		"userId": doctor_user.userId
 	})
 @app.route('/delete/<patientsId>', methods = ['DELETE'])
-@cross_origin(supports_credentials=True, headers=['Content- Type','Authorization'])
+@jwt_required()
+@cross_origin(supports_credentials=True, headers=['Content- Type','Authorization','Access-Control-Allow-Origin'])
 def patient_delete(patientsId):
 	patient = Patients.query.get(patientsId)
 	tcNm = patient.patientsTcNumber
 	disease = Diseases.query.filter_by(patient_tcNumber = tcNm).first()
-	db.session.delete(disease)
+
+	current_user = DoctorType.query.filter_by(tcNumber=get_jwt_identity()).first()
+	doctorDisposition = current_user.disposition
+
+	if(doctorDisposition != "Head of Department"):
+		return jsonify({"error": "You don't have permission!"}), 409
+
+	#db.session.delete(disease)
 	db.session.delete(patient)
 	db.session.commit()
 

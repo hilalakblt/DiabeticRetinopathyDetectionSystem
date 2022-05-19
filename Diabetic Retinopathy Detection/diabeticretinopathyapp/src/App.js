@@ -59,9 +59,9 @@ function App() {
                   <Routes token={token} setToken={setToken}>
                     <Route index element={<Detection />} />
                     <Route path="/detection" element={<Detection token={token} />} />
-                    <Route path="/patients" element={<Patients />}/>
+                    <Route path="/patients" element={<Patients token={token} />}/>
                     <Route path="/statistics" element={<Statistics />}/>
-                    <Route path="/addUser" element={<AddUser />}/>
+                    <Route path="/addUser" element={<AddUser token={token} />}/>
                     <Route path="/help" element={<Help />}/>
                   </Routes>
                 </div>

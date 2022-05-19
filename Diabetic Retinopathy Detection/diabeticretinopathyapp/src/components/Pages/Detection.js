@@ -51,6 +51,7 @@ const Detection = (props) => {
 			method: 'POST',
 			headers: { 
 				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
 				Authorization: 'Bearer ' + props.token
 			},
 			body: JSON.stringify({patientsTcNumber:patientsTcNumber, nameSurname:nameSurname, age:age, gender:gender, diseaseLevel:diseaseLevel})

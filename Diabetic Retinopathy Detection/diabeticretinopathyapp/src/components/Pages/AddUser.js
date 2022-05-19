@@ -1,7 +1,6 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './AddUser.css';
-import APIService from './APIService';
 
 
 const AddUser = (props) => {
@@ -16,20 +15,29 @@ const AddUser = (props) => {
 	const [gender, setGender] = useState('');
 
 
-
-	const insertDoctor = () => {
-		APIService.InsertDoctor({ name, surname, age, gender, doctor_tcNumber, email, passwd, disposition})
-		.then(resp => console.log(resp))
-		.catch(error => console.log(error))
-		//After adding doctor clear the inputs
-		setUserName("");
-	    setUserSurname("");
-	    setAge("");
-	    setEmail("");
-	    setTCNumber("");
-	    setPassword("");
-	    setDisposition("");
-	    setGender("");
+	async function insertDoctor(){
+		const requestOptions = {
+			method: 'POST',
+			headers: { 
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + props.token
+			},
+			body: JSON.stringify({name:name, surname:surname, age:age, gender:gender, doctor_tcNumber:doctor_tcNumber, email:email, passwd:passwd, disposition:disposition})
+		};
+		let result = await fetch('http://127.0.0.1:5000/adduser', requestOptions)
+			 .then(response => response.json())
+		if(result.status === 200){
+			setUserName("");
+		    setUserSurname("");
+		    setAge("");
+		    setEmail("");
+		    setTCNumber("");
+		    setPassword("");
+		    setDisposition("");
+		    setGender("");
+		}else{
+			alert("No permission!")
+		}
 	}
 
 
