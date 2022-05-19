@@ -12,6 +12,7 @@ import jwt
 from keras.models import load_model
 import json
 import cv2
+import os
 
 
 
@@ -207,8 +208,9 @@ def prediction_disease():
 	image = imgPreprocessing(imagePath)
 
 	pred = model.predict(image)
-	result =str(pred[0][0])
-	return result
+	result = str(pred[0][0])
+	#result = "level1"
+	return result+imagePath
 	
 	#return imagePath
 
@@ -216,10 +218,11 @@ def prediction_disease():
 @jwt_required()
 def save_patient():
 	jsondata = request.get_json(force=True)
-	patientsTcNumber = jsondata['patientsTcNumber']
+	patient_tcNumber = jsondata['patient_tcNumber']
 	nameSurname = jsondata['nameSurname']
 	age = jsondata['age']
 	gender = jsondata['gender']
+	imagePath = jsondata['imagePath']
 	diseaseLevel = jsondata['diseaseLevel']
 
 	#Getting current user
@@ -227,11 +230,11 @@ def save_patient():
 	doctorName = user.name
 	doctorSurname = user.surname
 
-	patient = Patients(patientsTcNumber = patientsTcNumber, nameSurname = nameSurname, age = age, gender = gender, doctorName=doctorName, doctorSurname=doctorSurname)
-	#disease = Diseases(diseaseLevel = diseaseLevel, imagePath=imagePath, patient_tcNumber = patientsTcNumber)
+	patient = Patients(patientsTcNumber = patient_tcNumber, nameSurname = nameSurname, age = age, gender = gender, doctorName=doctorName, doctorSurname=doctorSurname)
+	disease = Diseases(diseaseLevel = diseaseLevel, imagePath=imagePath, patient_tcNumber = patient_tcNumber)
 
 	db.session.add(patient)
-	#db.session.add(disease)
+	db.session.add(disease)
 	db.session.commit()
 
 	dump_data = patient_schema.dump(patient)
@@ -279,14 +282,15 @@ def patient_delete(patientsId):
 	patient = Patients.query.get(patientsId)
 	tcNm = patient.patientsTcNumber
 	disease = Diseases.query.filter_by(patient_tcNumber = tcNm).first()
-
+	imgPath = disease.imagePath
 	current_user = DoctorType.query.filter_by(tcNumber=get_jwt_identity()).first()
 	doctorDisposition = current_user.disposition
 
 	if(doctorDisposition != "Head of Department"):
 		return jsonify({"error": "You don't have permission!"}), 409
+	os.remove(imgPath)
 
-	#db.session.delete(disease)
+	db.session.delete(disease)
 	db.session.delete(patient)
 	db.session.commit()
 

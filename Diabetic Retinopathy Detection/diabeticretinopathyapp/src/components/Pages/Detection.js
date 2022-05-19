@@ -4,13 +4,14 @@ import './Detection.css'
 
 const Detection = (props) => {
 
-	const [patientsTcNumber, setPatientsTCNumber] = useState('');
+	const [patient_tcNumber, setPatientsTCNumber] = useState('');
 	const [nameSurname, setNameSurname] = useState('');
 	const [age, setAge] = useState('');
 	const [gender, setGender] = useState('');
 	const [file, setFile] = useState(null);
 	const [imgData, setImgData] = useState('');
 	const [diseaseLevel, setDiseaseLevel] = useState(null);
+	const [imagePath, setImagePath] = useState('');
 
 	/*var showdate = new Date();
 	var displayDate = showdate.getDate()
@@ -28,7 +29,9 @@ const Detection = (props) => {
 		});
 		if (result.status === 200){
 			const text = await result.text();
-			setDiseaseLevel(text);
+			const splittedText = text.split("./")
+			setDiseaseLevel(splittedText[0]);
+			setImagePath(splittedText[1]);
 		}else {
 			setDiseaseLevel("Error from API");
 		}
@@ -51,10 +54,9 @@ const Detection = (props) => {
 			method: 'POST',
 			headers: { 
 				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*',
-				Authorization: 'Bearer ' + props.token
+				'Authorization': 'Bearer ' + props.token
 			},
-			body: JSON.stringify({patientsTcNumber:patientsTcNumber, nameSurname:nameSurname, age:age, gender:gender, diseaseLevel:diseaseLevel})
+			body: JSON.stringify({patient_tcNumber:patient_tcNumber, nameSurname:nameSurname, age:age, gender:gender, imagePath:imagePath, diseaseLevel:diseaseLevel})
 		};
 		fetch('http://127.0.0.1:5000/savepatient', requestOption)
 			.then(response => response.json())
@@ -77,7 +79,7 @@ const Detection = (props) => {
 					<input 
 						type="text" 
 						placeholder="TC Number"
-						value={patientsTcNumber}
+						value={patient_tcNumber}
 						onChange={(e) => setPatientsTCNumber(e.target.value)}
 					/>
 				</div>
