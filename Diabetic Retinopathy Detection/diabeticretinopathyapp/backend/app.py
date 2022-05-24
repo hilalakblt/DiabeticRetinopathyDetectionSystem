@@ -200,7 +200,7 @@ def get_patients():
 
 @app.route('/detection', methods = ['POST'])
 def prediction_disease():
-	model = load_model('efficientModel.h5')
+	model = load_model('efficientModel2.h5')
 	
 	imageFile = request.files['file']
 	imagePath = "./FundusImages/" + imageFile.filename
@@ -208,7 +208,7 @@ def prediction_disease():
 	image = imgPreprocessing(imagePath)
 
 	pred = model.predict(image)
-	result = str(pred[0][0])
+	result = str(pred[0])
 	#result = "level1"
 	return result+imagePath
 	
