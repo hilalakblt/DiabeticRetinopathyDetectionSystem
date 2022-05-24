@@ -128,7 +128,9 @@ const Detection = (props) => {
 					<input type='button' value='Detect' onClick={onSubmit} />
 					<input type='button' value='Save' onClick={insertPatient} />
 				</div>
-					{diseaseLevel}	
+				<div className="disease_level">
+					{diseaseLevel}
+				</div>	
 			</form>
 			
 		</div>

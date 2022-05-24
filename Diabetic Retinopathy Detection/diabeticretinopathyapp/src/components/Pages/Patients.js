@@ -28,11 +28,6 @@ const Patients = (props) => {
 		setPatients(new_patient)
 	}
 
-	/*const deletePatient = (patient) => {
-		APIService.DeletePatient(patient.patientsId)
-		.then(() => deletedPatient(patient))
-	}*/
-
 	async function deletePatient(patient){
 		const patientsId = patient.patientsId
 		const reqOptions = {

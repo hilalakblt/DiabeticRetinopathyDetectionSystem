@@ -208,11 +208,29 @@ def prediction_disease():
 	image = imgPreprocessing(imagePath)
 
 	pred = model.predict(image)
-	result = str(pred[0])
-	#result = "level1"
-	return result+imagePath
+
+	maxNum = 0
+	index = 0
+
+	for i in pred:
+		for ind,j in enumerate(i):
+			if(j>maxNum):
+				maxNum = j
+				index = ind
+	if(index==0):
+		result = "No DR"
+	elif(index==1):
+		result = "Mild"
+	elif(index==2):
+		result = "Moderate"
+	elif(index==3):
+		result = "Severe"
+	else:
+		result = "Proliferative DR"
+
+	maxNum = str(maxNum)
+	return result + " --> " + maxNum + imagePath
 	
-	#return imagePath
 
 @app.route('/savepatient', methods = ['POST'])
 @jwt_required()

@@ -18,7 +18,7 @@
 	border-radius: 5px;
 	display: inline-block;
 	border-bottom: 2px solid #adadad;
-	margin-top: 20px;
+	margin-top: 5px;
 	margin-left: 10px;
 	font-size: 17px;
 }
@@ -53,4 +53,8 @@
 .detection_button {
 	margin-left: 70%;
 	margin-top: 20px;
+}
+
+.disease_level {
+	margin-left: 10%; 
 }
