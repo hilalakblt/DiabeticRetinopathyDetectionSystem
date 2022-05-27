@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import './AddUser.css';
+import PopupError from './PopupError.js';
+import PopupSuccess from './PopupSuccess.js';
 
 
 const AddUser = (props) => {
@@ -13,6 +15,8 @@ const AddUser = (props) => {
 	const [passwd, setPassword] = useState('');
 	const [disposition, setDisposition] = useState('');
 	const [gender, setGender] = useState('');
+	const [buttonPopup, setButtonPopup] = useState(false);
+	const [popupSuccess, setPopupSuccess] = useState(false);
 
 
 	async function insertDoctor(){
@@ -25,8 +29,10 @@ const AddUser = (props) => {
 			body: JSON.stringify({name:name, surname:surname, age:age, gender:gender, doctor_tcNumber:doctor_tcNumber, email:email, passwd:passwd, disposition:disposition})
 		};
 		let result = await fetch('http://127.0.0.1:5000/adduser', requestOptions)
-			 .then(response => response.json())
+			 //.then(response => response.json())
+			 console.log(result.status)
 		if(result.status === 200){
+			setPopupSuccess(true);
 			setUserName("");
 		    setUserSurname("");
 		    setAge("");
@@ -36,7 +42,7 @@ const AddUser = (props) => {
 		    setDisposition("");
 		    setGender("");
 		}else{
-			alert("No permission!")
+			setButtonPopup(true)
 		}
 	}
 
@@ -109,7 +115,7 @@ const AddUser = (props) => {
 						type="radio" 
 						value="Female"
 						name="gender"
-						checked={gender === "Female"} //Database icin {gender} kullan, date icin {displayDate} kullan
+						checked={gender === "Female"}
 						onChange={(e) => setGender(e.target.value)}
 					/>Female
 					<input 
@@ -122,6 +128,12 @@ const AddUser = (props) => {
 				</div>
 				<div className='save_button'>
 					<input type='button' value='Save' onClick = {insertDoctor} />
+					<PopupError trigger={buttonPopup} setTrigger={setButtonPopup}>
+						<h3>You do not have permission!</h3>
+					</PopupError>
+					<PopupSuccess trigger={popupSuccess} setTrigger={setPopupSuccess}>
+						<h3>Successful!!</h3>
+					</PopupSuccess>
 				</div>
 			</form>
 		</div>

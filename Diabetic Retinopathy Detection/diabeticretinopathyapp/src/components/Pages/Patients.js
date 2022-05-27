@@ -1,10 +1,16 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import './Patients.css';
+import PopupError from './PopupError.js';
+import PopupSuccess from './PopupSuccess';
+import PatientDetails from './PatientDetails';
 
 const Patients = (props) => {
 
-	const [patients, setPatients] = useState([])
+	const [patients, setPatients] = useState([]);
+	const [buttonPopup, setButtonPopup] = useState(false);
+	const [popupSuccess, setPopupSuccess] = useState(false);
+	const [patientDetails, setPatientDetails] = useState(false);
 
 	useEffect(() => {
 		fetch('http://127.0.0.1:5000/patients', {
@@ -46,22 +52,33 @@ const Patients = (props) => {
 		let result = await fetch(`http://127.0.0.1:5000/delete/${patientsId}`, reqOptions);
 		if(result.status === 200){
 			deletedPatient(patient)
-			alert("Successfully deleted!")
+			setPopupSuccess(true)
 		}else{
-			alert("No permission!")
+			setButtonPopup(true)
 		}
 	}
+
 
 	return (
 		<div className='patients_page'>
 			{patients.map(patient => {
 				return(
 					<div key = {patient.patientsId} className='patient_info'>
-						<h2>{patient.nameSurname}</h2>
+						<input type='button' value='Details' />
+						<PatientDetails trigger={patientDetails} setTrigger={setPatientDetails} >
+							
+						</PatientDetails>
+						<h4>{patient.nameSurname}</h4>
 						<p>Doctor Name Surname: {patient.doctorName} {patient.doctorSurname}</p>
 						<p>Tc Number: {patient.patientsTcNumber}</p>
 						<div className='delete_button'>
 							<input type='button' value='Delete' onClick = {() => deletePatient(patient)} />
+							<PopupError trigger={buttonPopup} setTrigger={setButtonPopup}>
+								<h3>You do not have permission!</h3>
+							</PopupError>
+							<PopupSuccess trigger={popupSuccess} setTrigger={setPopupSuccess}>
+								<h3>User is deleted!</h3>
+							</PopupSuccess>
 						</div>
 					</div>
 				)

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
@@ -8,7 +9,7 @@ const Login = (props) => {
 	const [tcNumber, setTcNumber] = useState('');
 	const [passwd, setPassword] = useState('');
 
-	function logMeIn(event) {
+	function loginPage(event) {
       axios({
         method: "POST",
         url:"/login",
@@ -32,12 +33,7 @@ const Login = (props) => {
 
       event.preventDefault()
     }
-    /*function handleChange(event) { 
-      const {value, name} = event.target
-      setloginForm(prevNote => ({
-          ...prevNote, [name]: value})
-      )}*/
-
+    
 	return (
 		<div className="login_form">
 			<h1>DRDS</h1>
@@ -58,8 +54,10 @@ const Login = (props) => {
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 				</div>
-				<input onClick={logMeIn} type="submit" value="Login" />
-				<div className="forgot_pass">Forgot Password?</div>
+				<Link to="/detection">
+					<input onClick={loginPage} type="submit" value="Login" />
+				</Link>
+				<div className="forgot_pass" >Take a new password</div>
 			</form>
 		</div>
 		

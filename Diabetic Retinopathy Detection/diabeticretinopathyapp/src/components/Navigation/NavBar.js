@@ -7,7 +7,7 @@ import './NavBar.css';
 
 const NavBar = (props) => {
 
-	function logMeOut() {
+	function logginOut() {
 	    axios({
 	      method: "POST",
 	      url:"/logout",
@@ -24,9 +24,7 @@ const NavBar = (props) => {
 
 	return (
 		<div>
-			
 			<nav className="nav_bar">
-				
 				<ul className='nav_links'>
 					<Link to="/detection">
 						<li className='nav_text'>Detection</li>
@@ -43,9 +41,11 @@ const NavBar = (props) => {
 					<Link to="/help">
 						<li  className='nav_text'>Help</li>
 					</Link>
-					<div className='save_button'>
-						<input type='button' value='Logout' onClick = {logMeOut} />
-					</div>
+					<Link to="/login">
+						<div className='save_button'>
+							<input type='button' value='Logout' onClick = {logginOut} />
+						</div>
+					</Link>
 				</ul>
 			</nav>
 		</div>

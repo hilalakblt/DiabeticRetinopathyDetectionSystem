@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import './Detection.css'
+import PopupSuccess from './PopupSuccess';
 
 const Detection = (props) => {
 
@@ -12,6 +13,7 @@ const Detection = (props) => {
 	const [imgData, setImgData] = useState('');
 	const [diseaseLevel, setDiseaseLevel] = useState(null);
 	const [imagePath, setImagePath] = useState('');
+	const [popupSuccess, setPopupSuccess] = useState(false);
 
 	/*var showdate = new Date();
 	var displayDate = showdate.getDate()
@@ -49,7 +51,7 @@ const Detection = (props) => {
 	    }
 	};
 
-	const insertPatient = () => {
+	async function insertPatient(){
 		const requestOption = {
 			method: 'POST',
 			headers: { 
@@ -58,16 +60,19 @@ const Detection = (props) => {
 			},
 			body: JSON.stringify({patient_tcNumber:patient_tcNumber, nameSurname:nameSurname, age:age, gender:gender, imagePath:imagePath, diseaseLevel:diseaseLevel})
 		};
-		fetch('http://127.0.0.1:5000/savepatient', requestOption)
-			.then(response => response.json())
-
-		setPatientsTCNumber("");
-		setNameSurname("");
-		setAge("");
-		setGender("");
-		setDiseaseLevel(null);
-		setFile(null)
-		setImgData('')
+		let result = await fetch('http://127.0.0.1:5000/savepatient', requestOption)
+			//.then(response => response.json())
+			console.log(result.status)
+		if(result.status === 200){
+			setPopupSuccess(true);
+			setPatientsTCNumber("");
+			setNameSurname("");
+			setAge("");
+			setGender("");
+			setDiseaseLevel(null);
+			setFile(null)
+			setImgData('')
+		}
 			
 	}	
 
@@ -127,6 +132,9 @@ const Detection = (props) => {
 				<div className='detection_button'>
 					<input type='button' value='Detect' onClick={onSubmit} />
 					<input type='button' value='Save' onClick={insertPatient} />
+					<PopupSuccess trigger={popupSuccess} setTrigger={setPopupSuccess}>
+						<h3>Patient is saved!</h3>
+					</PopupSuccess>
 				</div>
 				<div className="disease_level">
 					{diseaseLevel}

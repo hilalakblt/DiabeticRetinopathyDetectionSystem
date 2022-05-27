@@ -198,6 +198,14 @@ def get_patients():
 
 	return jsonify(results)
 
+@app.route('/statistics', methods = ['GET'])
+def get_statistics():
+	all_diseases = Diseases.query.all()
+	results = diseases_schema.dump(all_diseases)
+
+	return jsonify(results)
+
+
 @app.route('/detection', methods = ['POST'])
 def prediction_disease():
 	model = load_model('efficientModel2.h5')
@@ -293,6 +301,15 @@ def add_users():
 	return jsonify({
 		"userId": doctor_user.userId
 	})
+
+@app.route('/getDetail/<patientsTcNumber>', methods = ['GET'])
+def get_details(patientsTcNumber):
+	dis = Diseases.query.filter_by(patient_tcNumber = patientsTcNumber).first()
+
+	return jsonify({
+		"diseaseLevel": dis.diseaseLevel
+	})
+
 @app.route('/delete/<patientsId>', methods = ['DELETE'])
 @jwt_required()
 @cross_origin(supports_credentials=True, headers=['Content- Type','Authorization','Access-Control-Allow-Origin'])
