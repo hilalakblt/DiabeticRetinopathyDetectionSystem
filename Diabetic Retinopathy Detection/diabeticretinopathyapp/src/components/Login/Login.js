@@ -57,7 +57,7 @@ const Login = (props) => {
 				<Link to="/detection">
 					<input onClick={loginPage} type="submit" value="Login" />
 				</Link>
-				<div className="forgot_pass" >Take a new password</div>
+
 			</form>
 		</div>
 		

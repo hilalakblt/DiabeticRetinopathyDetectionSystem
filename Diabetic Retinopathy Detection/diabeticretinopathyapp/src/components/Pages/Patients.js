@@ -3,7 +3,6 @@ import {useState, useEffect} from 'react';
 import './Patients.css';
 import PopupError from './PopupError.js';
 import PopupSuccess from './PopupSuccess';
-import PatientDetails from './PatientDetails';
 
 const Patients = (props) => {
 
@@ -58,16 +57,11 @@ const Patients = (props) => {
 		}
 	}
 
-
 	return (
 		<div className='patients_page'>
 			{patients.map(patient => {
 				return(
 					<div key = {patient.patientsId} className='patient_info'>
-						<input type='button' value='Details' />
-						<PatientDetails trigger={patientDetails} setTrigger={setPatientDetails} >
-							
-						</PatientDetails>
 						<h4>{patient.nameSurname}</h4>
 						<p>Doctor Name Surname: {patient.doctorName} {patient.doctorSurname}</p>
 						<p>Tc Number: {patient.patientsTcNumber}</p>

@@ -38,19 +38,6 @@ form .login_text {
 	transform: translateY(-50%);
 }
 
-.forgot_pass {
-	text-align: right;
-	font-weight: bold;
-	font-size: 15px;
-	color: #a6a6a6;
-	margin: 20px 0 20px 5px;
-	cursor: pointer;
-}
-
-.forgot_pass:hover {
-	text-decoration: underline;
-}
-
 input[type='submit'] {
 	width: 100%;
 	height: 40px;
@@ -61,6 +48,7 @@ input[type='submit'] {
 	cursor: pointer;
 	outline: none;
 	background-color: #8BC8B2;
+	margin-bottom: 12%;
 }
 
 input[type='submit']:hover {

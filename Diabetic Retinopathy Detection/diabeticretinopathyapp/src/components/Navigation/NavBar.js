@@ -41,11 +41,9 @@ const NavBar = (props) => {
 					<Link to="/help">
 						<li  className='nav_text'>Help</li>
 					</Link>
-					<Link to="/login">
-						<div className='save_button'>
-							<input type='button' value='Logout' onClick = {logginOut} />
-						</div>
-					</Link>
+					<div className='save_button'>
+						<input type='button' value='Logout' onClick = {logginOut} />
+					</div>
 				</ul>
 			</nav>
 		</div>
