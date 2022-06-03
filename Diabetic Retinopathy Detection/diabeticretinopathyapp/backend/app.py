@@ -25,7 +25,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-#app.config['JWT_TOKEN_LOCATION'] = ['headers', 'query_string']
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
@@ -60,14 +59,17 @@ class Patients(db.Model):
 	nameSurname = db.Column(db.String(200))
 	age = db.Column(db.Integer)
 	gender = db.Column(db.String(10))
+	diseaseLevel = db.Column(db.String(30))
 	doctorName = db.Column(db.String(25))
 	doctorSurname = db.Column(db.String(30))
+	date = db.Column(db.DateTime, default=datetime.datetime.now)
 
-	def __init__(self, patientsTcNumber, nameSurname, age, gender, doctorName, doctorSurname):
+	def __init__(self, patientsTcNumber, nameSurname, age, gender, diseaseLevel, doctorName, doctorSurname):
 		self.patientsTcNumber = patientsTcNumber
 		self.nameSurname = nameSurname
 		self.age = age
 		self.gender = gender
+		self.diseaseLevel = diseaseLevel
 		self.doctorName = doctorName
 		self.doctorSurname = doctorSurname
 
@@ -131,24 +133,6 @@ disease_schema = DiseasesSchema()
 diseases_schema = DiseasesSchema(many=True)
 
 
-
-
-@app.route("/@currentUser")
-def get_current_user():
-	userId = session.get("userId")
-
-	if not userId:
-		return jsonify({"error": "Unauthorized"}), 401
-	user = DoctorType.query.filter_by(userId = userId).first()
-	doctor = Doctors.query.filter_by(doctor_tcNumber = user.tcNumber).first()
-	
-	return jsonify({
-		"userId": user.userId,
-		"tcNumber": user.tcNumber,
-		"disposition": user.disposition,
-		"name": doctor.name,
-		"surname": doctor.surname
-	})
 
 @app.route('/login', methods = ['POST'])
 def login_user():
@@ -256,7 +240,7 @@ def save_patient():
 	doctorName = user.name
 	doctorSurname = user.surname
 
-	patient = Patients(patientsTcNumber = patient_tcNumber, nameSurname = nameSurname, age = age, gender = gender, doctorName=doctorName, doctorSurname=doctorSurname)
+	patient = Patients(patientsTcNumber = patient_tcNumber, nameSurname = nameSurname, age = age, gender = gender, diseaseLevel=diseaseLevel, doctorName=doctorName, doctorSurname=doctorSurname)
 	disease = Diseases(diseaseLevel = diseaseLevel, imagePath=imagePath, patient_tcNumber = patient_tcNumber)
 
 	db.session.add(patient)

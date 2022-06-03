@@ -65,6 +65,8 @@ const Patients = (props) => {
 						<h4>{patient.nameSurname}</h4>
 						<p>Doctor Name Surname: {patient.doctorName} {patient.doctorSurname}</p>
 						<p>Tc Number: {patient.patientsTcNumber}</p>
+						<p>Disease Level: {patient.diseaseLevel}</p>
+						<p>Date: {patient.date}</p>
 						<div className='delete_button'>
 							<input type='button' value='Delete' onClick = {() => deletePatient(patient)} />
 							<PopupError trigger={buttonPopup} setTrigger={setButtonPopup}>

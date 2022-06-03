@@ -38,9 +38,6 @@ const NavBar = (props) => {
 					<Link to="/addUser">
 						<li className='nav_text'>Add User</li>
 					</Link>
-					<Link to="/help">
-						<li  className='nav_text'>Help</li>
-					</Link>
 					<div className='save_button'>
 						<input type='button' value='Logout' onClick = {logginOut} />
 					</div>

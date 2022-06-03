@@ -62,7 +62,6 @@ function App() {
                     <Route path="/patients" element={<Patients token={token} />}/>
                     <Route path="/statistics" element={<Statistics />}/>
                     <Route path="/addUser" element={<AddUser token={token} />}/>
-                    <Route path="/help" element={<Help />}/>
                   </Routes>
                 </div>
               }

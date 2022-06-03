@@ -20,7 +20,7 @@ nav {
 	display: flex;
 	margin: auto;
 	background-color: white;
-	opacity: 0.6;
+
 	width: 60%;
 	display: flex;
 	justify-content: space-around;
@@ -33,5 +33,5 @@ nav {
 
 .nav_text {
 	display: flex;
-	color: #000000;
+	color: black;
 }
